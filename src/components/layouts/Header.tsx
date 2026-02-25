@@ -1,10 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, User, ShoppingBag, ArrowRight, Menu } from 'lucide-react';
+import { Search, User, ShoppingBag, ArrowRight, Menu, X } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const Header: React.FC = () => {
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isSearchVisible && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isSearchVisible]);
+
+  const toggleSearch = () => {
+    setIsSearchVisible(!isSearchVisible);
+    if (isSearchVisible) {
+      setSearchQuery("");
+    }
+  };
+
   return (
     <header className="w-full flex flex-col items-center bg-white sticky top-0 z-50">
       {/* Top Banner */}
@@ -34,9 +52,36 @@ const Header: React.FC = () => {
       </div>
 
       {/* Main Navigation */}
-      <div className="w-full border-b border-[#DDDBDC] px-[20px] md:px-[68px] flex justify-between items-center h-[60px] relative">
+      <div className="w-full border-b border-[#DDDBDC] px-[20px] md:px-[68px] flex justify-between items-center h-[60px] relative overflow-hidden">
+        {/* Search Bar Overlay */}
+        <div 
+          className={`absolute inset-0 bg-white z-20 flex items-center px-[20px] md:px-[68px] transition-transform duration-300 ease-in-out ${
+            isSearchVisible ? 'translate-y-0' : '-translate-y-full'
+          }`}
+        >
+          <div className="flex w-full items-center gap-4">
+            <Search className="w-[20px] h-[20px] text-[#262626]" />
+            <Input
+              ref={searchInputRef}
+              type="text"
+              placeholder="Search products..."
+              className="flex-grow border-none focus-visible:ring-0 text-[16px] placeholder:text-gray-400"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => e.key === 'Escape' && toggleSearch()}
+            />
+            <button 
+              onClick={toggleSearch}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              aria-label="Close search"
+            >
+              <X className="w-[20px] h-[20px] text-[#262626]" />
+            </button>
+          </div>
+        </div>
+
         {/* Mobile Menu */}
-        <div className="flex md:hidden">
+        <div className={`flex md:hidden ${isSearchVisible ? 'invisible' : 'visible'}`}>
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="text-[#262626]">
@@ -58,7 +103,7 @@ const Header: React.FC = () => {
         </div>
 
         {/* Left Nav (Desktop) */}
-        <nav className="hidden md:flex items-center h-full">
+        <nav className={`hidden md:flex items-center h-full ${isSearchVisible ? 'invisible' : 'visible'}`}>
           <Link to="/women" className="px-[12px] py-[20px] text-[#262626] text-[12px] leading-[1.33] tracking-[0.016em] hover:text-black transition-colors">Women</Link>
           <Link to="/men" className="px-[12px] py-[20px] text-[#262626] text-[12px] leading-[1.33] tracking-[0.016em] hover:text-black transition-colors">Men</Link>
           <div className="flex flex-col items-center gap-[18px] px-[12px] pt-[20px] h-full relative">
@@ -69,13 +114,17 @@ const Header: React.FC = () => {
         </nav>
 
         {/* Logo */}
-        <Link to="/" className="absolute left-1/2 -translate-x-1/2 top-[21px]">
+        <Link to="/" className={`absolute left-1/2 -translate-x-1/2 top-[21px] ${isSearchVisible ? 'invisible' : 'visible'}`}>
           <span className="text-[16px] md:text-[18px] font-bold md:tracking-[0.2em] tracking-[0.1em] text-[#262626]">EVERLANE</span>
         </Link>
 
         {/* Right Icons */}
-        <div className="flex items-center">
-          <button className="p-[8px] md:p-[12px] text-[#262626] hover:bg-gray-50 rounded-full transition-colors">
+        <div className={`flex items-center ${isSearchVisible ? 'invisible' : 'visible'}`}>
+          <button 
+            onClick={toggleSearch}
+            className="p-[8px] md:p-[12px] text-[#262626] hover:bg-gray-50 rounded-full transition-colors"
+            aria-label="Open search"
+          >
             <Search className="w-[16px] h-[16px]" />
           </button>
           <button className="hidden sm:block p-[8px] md:p-[12px] text-[#262626] hover:bg-gray-50 rounded-full transition-colors">
