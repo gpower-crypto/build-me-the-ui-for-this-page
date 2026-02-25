@@ -1,14 +1,16 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Frame25 from './pages/Frame25';
-import Stores from './pages/Stores';
+import Header from './pages/Header';
+import Footer from './pages/Footer';
+import Blog from './pages/Blog';
 
 const App = () => {
   return (
     <Routes>
-        <Route path="/" element={<Frame25 />} />
-        <Route path="/frame-25" element={<Frame25 />} />
-        <Route path="/stores" element={<Stores />} />
+        <Route path="/" element={<Header />} />
+        <Route path="/header" element={<Header />} />
+        <Route path="/footer" element={<Footer />} />
+        <Route path="/blog" element={<Blog />} />
     </Routes>
   );
 };
