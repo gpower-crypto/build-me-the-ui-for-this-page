@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Frame25 from './pages/Frame 25';
+import Frame25 from './pages/Frame25';
 import Stores from './pages/Stores';
 
 const App = () => {

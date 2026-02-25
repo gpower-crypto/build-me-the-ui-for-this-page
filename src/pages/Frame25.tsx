@@ -10,7 +10,7 @@ import StoreCard from '../components/StoreCard';
  * Displays a list of physical store locations with images and names.
  */
 
-const StoreLocator: React.FC = () => {
+const Frame25: React.FC = () => {
   const stores = [
     {
       city: "SEATTLE",
@@ -98,4 +98,4 @@ const StoreLocator: React.FC = () => {
   );
 };
 
-export default StoreLocator;
+export default Frame25;
